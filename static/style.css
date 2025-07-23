@@ -1,0 +1,188 @@
+/* Custom styles for KTU Issue Portal */
+
+:root {
+    --ktu-primary: #1e3a8a;
+    --ktu-secondary: #f59e0b;
+    --ktu-accent: #059669;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Custom button styles */
+.btn-primary {
+    background-color: var(--ktu-primary);
+    border-color: var(--ktu-primary);
+}
+
+.btn-primary:hover {
+    background-color: #1e40af;
+    border-color: #1e40af;
+}
+
+/* Navbar customization */
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Card enhancements */
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    border-radius: 8px 8px 0 0 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Status badges */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+}
+
+/* Form enhancements */
+.form-control:focus {
+    border-color: var(--ktu-primary);
+    box-shadow: 0 0 0 0.2rem rgba(30, 58, 138, 0.25);
+}
+
+.form-select:focus {
+    border-color: var(--ktu-primary);
+    box-shadow: 0 0 0 0.2rem rgba(30, 58, 138, 0.25);
+}
+
+/* Input group styles */
+.input-group-text {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+    color: #6c757d;
+}
+
+/* Alert customization */
+.alert {
+    border: none;
+    border-radius: 6px;
+}
+
+/* Table improvements */
+.table-hover tbody tr:hover {
+    background-color: rgba(30, 58, 138, 0.05);
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Loading and hover effects */
+.btn {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Empty state styling */
+.text-muted i {
+    opacity: 0.6;
+}
+
+/* Dashboard cards specific styling */
+.bg-warning {
+    background-color: #f59e0b !important;
+}
+
+.bg-info {
+    background-color: #0ea5e9 !important;
+}
+
+.bg-success {
+    background-color: var(--ktu-accent) !important;
+}
+
+/* Form validation styles */
+.was-validated .form-control:valid {
+    border-color: var(--ktu-accent);
+}
+
+.was-validated .form-control:invalid {
+    border-color: #dc3545;
+}
+
+/* Animation for page transitions */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Custom dropdown styling */
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(30, 58, 138, 0.1);
+    color: var(--ktu-primary);
+}
