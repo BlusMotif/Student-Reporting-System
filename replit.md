@@ -1,8 +1,8 @@
-# University Student Issue Reporting System
+# Koforidua Technical University Student Issue Reporting System
 
 ## Overview
 
-This is a Flask-based web application that allows university students to report issues to administrators (Dean, HOD, etc.). The system provides role-based access with separate interfaces for students and administrators, built using Python Flask with SQLite database and Bootstrap frontend.
+This is a Flask-based web application that allows Koforidua Technical University students to report issues to administrators (Dean, HOD, etc.). The system provides role-based access with separate interfaces for students and administrators, built using Python Flask with SQLite database and Bootstrap frontend with professional KTU branding.
 
 ## User Preferences
 
@@ -21,8 +21,9 @@ Preferred communication style: Simple, everyday language.
 - **Template Engine**: Jinja2 (Flask's default)
 - **CSS Framework**: Bootstrap 5.3.0
 - **Icons**: Font Awesome 6.4.0
-- **Styling**: Custom CSS with KTU branding colors
+- **Styling**: Custom CSS with Koforidua Technical University branding colors and professional login interface
 - **Responsive Design**: Bootstrap responsive grid system
+- **Logo**: Official KTU logo (PNG format) integrated throughout the system
 
 ### Database Design
 - **Type**: SQLite (file-based database)
@@ -92,8 +93,16 @@ Preferred communication style: Simple, everyday language.
 
 ### Database Initialization
 - **Automatic Setup**: Database and tables created on first run
-- **Sample Data**: Default admin and student accounts created
+- **Sample Data**: Default admin and student accounts created for testing
 - **Password Defaults**: admin/admin123, student1/student123, student2/student123
+
+## Recent Changes (July 23, 2025)
+- Updated university branding to "Koforidua Technical University"
+- Integrated official KTU logo (PNG format) throughout the system
+- Redesigned login interface with professional styling and gradient background
+- Removed demo account references from login page for production-ready appearance
+- Enhanced CSS with professional login animations and responsive design
+- Updated all page titles and footer to reflect correct university name
 
 ### Security Considerations
 - **Session Secret**: Should be set via environment variable in production
