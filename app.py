@@ -181,6 +181,37 @@ def resolve_issue(issue_id):
     flash(f'Issue status updated to {new_status}!', 'success')
     return redirect(url_for('admin_issues'))
 
+@app.route('/delete-issue/<int:issue_id>', methods=['POST'])
+def delete_issue(issue_id):
+    if g.user is None:
+        return redirect(url_for('login'))
+    
+    db = get_db()
+    
+    # Check if the issue belongs to the current user (for students) or if user is admin
+    if g.user['role'] == 'student':
+        issue = db.execute(
+            'SELECT * FROM issues WHERE id = ? AND student_id = ?',
+            (issue_id, g.user['id'])
+        ).fetchone()
+    else:
+        # Admin can delete any issue
+        issue = db.execute(
+            'SELECT * FROM issues WHERE id = ?',
+            (issue_id,)
+        ).fetchone()
+    
+    if issue is None:
+        flash('Issue not found or you do not have permission to delete it.', 'danger')
+        return redirect(url_for('my_issues') if g.user['role'] == 'student' else url_for('admin_issues'))
+    
+    # Delete the issue
+    db.execute('DELETE FROM issues WHERE id = ?', (issue_id,))
+    db.commit()
+    
+    flash('Issue deleted successfully!', 'success')
+    return redirect(url_for('my_issues') if g.user['role'] == 'student' else url_for('admin_issues'))
+
 @app.route('/logout')
 def logout():
     session.clear()

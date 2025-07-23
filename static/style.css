@@ -464,3 +464,443 @@ footer {
         height: 54px;
     }
 }
+
+/* Modern Dashboard Styles */
+.dashboard-container {
+    padding: 2rem 0;
+}
+
+.dashboard-header {
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ktu-primary);
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.header-actions .btn {
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Modern Stat Cards */
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.stat-card-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.pending-card .stat-icon {
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+}
+
+.progress-card .stat-icon {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.resolved-card .stat-icon {
+    background: linear-gradient(135deg, #059669, #047857);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ktu-primary);
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-bottom: 0;
+    font-weight: 500;
+}
+
+.stat-card-footer {
+    border-top: 1px solid #f3f4f6;
+    padding-top: 0.75rem;
+}
+
+/* Recent Issues Section */
+.recent-issues-section {
+    margin-top: 3rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ktu-primary);
+    margin-bottom: 0;
+}
+
+.modern-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+}
+
+/* Issues Grid */
+.issues-grid {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.issue-item {
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.issue-item:hover {
+    border-color: var(--ktu-primary);
+    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.1);
+}
+
+.issue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.issue-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ktu-primary);
+    margin-bottom: 0;
+}
+
+.issue-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.category-tag {
+    background: #f3f4f6;
+    color: #6b7280;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.issue-date {
+    color: #9ca3af;
+    font-size: 0.875rem;
+}
+
+.issue-preview {
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+}
+
+.status-badge.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.progress {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-badge.resolved {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+/* Empty State */
+.empty-state-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+.empty-state {
+    text-align: center;
+    max-width: 400px;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: #d1d5db;
+    margin-bottom: 1.5rem;
+}
+
+.empty-state h3, .empty-state h4 {
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+/* Modern Issue Cards */
+.issues-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modern-issue-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.modern-issue-card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.issue-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.5rem 1.5rem 0;
+}
+
+.issue-title-section h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ktu-primary);
+    margin-bottom: 0.5rem;
+}
+
+.issue-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-badge {
+    background: #f3f4f6;
+    color: #6b7280;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.issue-card-body {
+    padding: 1.5rem;
+}
+
+.issue-description {
+    color: #4b5563;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.admin-response {
+    background: #f0f9ff;
+    border: 1px solid #e0f2fe;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.response-header {
+    font-weight: 600;
+    color: var(--ktu-primary);
+    margin-bottom: 0.5rem;
+}
+
+.response-text {
+    color: #4b5563;
+    margin-bottom: 0;
+}
+
+.issue-card-footer {
+    background: #f9fafb;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.issue-date {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+/* Admin Dashboard Styles */
+.admin-issues-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.admin-issue-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+}
+
+.admin-issue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.5rem 1.5rem 0;
+}
+
+.admin-issue-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ktu-primary);
+    margin-bottom: 0.5rem;
+}
+
+.student-info {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.student-name {
+    font-weight: 500;
+}
+
+.issue-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.admin-issue-body {
+    padding: 1.5rem;
+}
+
+.previous-response {
+    background: #fef7cd;
+    border: 1px solid #fed7aa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.admin-action-section {
+    background: #f9fafb;
+    padding: 1.5rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.admin-response-form .form-label {
+    color: var(--ktu-primary);
+    font-size: 0.875rem;
+}
+
+.admin-issue-footer {
+    background: #f3f4f6;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Responsive Design for Dashboards */
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 2rem;
+    }
+    
+    .dashboard-header {
+        text-align: center;
+    }
+    
+    .header-actions {
+        margin-top: 1rem;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .issue-card-header,
+    .admin-issue-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .issue-actions,
+    .issue-meta {
+        align-self: stretch;
+    }
+    
+    .stat-card-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .admin-action-section .row {
+        flex-direction: column;
+    }
+    
+    .admin-action-section .col-md-2 {
+        align-self: stretch !important;
+    }
+}
