@@ -117,7 +117,7 @@
                                             <span class="badge bg-success">Resolved</span>
                                         {% endif %}
                                     </td>
-                                    <td>{{ issue.created_at.strftime('%Y-%m-%d') if issue.created_at else 'N/A' }}</td>
+                                    <td>{{ parse_datetime(issue.created_at).split(' at')[0] if issue.created_at else 'N/A' }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

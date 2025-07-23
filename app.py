@@ -5,11 +5,24 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import init_db, get_db
 
+def parse_datetime(date_string):
+    """Parse datetime string from database and return formatted string"""
+    if not date_string:
+        return 'Unknown date'
+    try:
+        dt = datetime.strptime(date_string, '%Y-%m-%d %H:%M:%S')
+        return dt.strftime('%B %d, %Y at %I:%M %p')
+    except:
+        return date_string
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key-change-in-production")
 
 # Initialize database
 init_db()
+
+# Register the helper function for templates
+app.jinja_env.globals['parse_datetime'] = parse_datetime
 
 @app.before_request
 def load_logged_in_user():
@@ -112,7 +125,7 @@ def submit_issue():
             db.execute(
                 '''INSERT INTO issues (student_id, subject, category, message, status, created_at)
                    VALUES (?, ?, ?, ?, ?, ?)''',
-                (g.user['id'], subject, category, message, 'pending', datetime.now())
+                (g.user['id'], subject, category, message, 'pending', datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
             )
             db.commit()
             flash('Issue submitted successfully!', 'success')
