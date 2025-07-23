@@ -189,106 +189,278 @@ footer {
     color: var(--ktu-primary);
 }
 
-/* Professional Login Page Styles */
-.min-vh-100 {
+/* Modern Split-Screen Login Design */
+.login-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 2rem 0;
+    overflow: hidden;
 }
 
-.login-container {
-    animation: fadeInUp 0.8s ease-out;
+.login-page .container-fluid {
+    height: 100vh;
 }
 
-.university-logo {
+/* Left Panel - Branding */
+.login-left-panel {
+    background: linear-gradient(135deg, var(--ktu-primary) 0%, #2563eb 50%, var(--ktu-accent) 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.login-branding {
+    text-align: center;
+    color: white;
+    z-index: 2;
+    position: relative;
+}
+
+.main-logo {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 2rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.university-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.university-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 0;
+}
+
+/* Decorative Elements */
+.decorative-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.element {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: float 6s ease-in-out infinite;
+}
+
+.element-1 {
+    width: 200px;
+    height: 200px;
+    top: 10%;
+    left: -10%;
+    animation-delay: 0s;
+}
+
+.element-2 {
+    width: 150px;
+    height: 150px;
+    bottom: 20%;
+    right: -5%;
+    animation-delay: 2s;
+}
+
+.element-3 {
+    width: 100px;
+    height: 100px;
+    top: 60%;
+    left: 80%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* Right Panel - Login Form */
+.login-right-panel {
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.login-form-container {
+    width: 100%;
+    max-width: 400px;
+    animation: fadeInRight 0.8s ease-out;
+}
+
+.mobile-logo {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    padding: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.university-name {
-    color: #ffffff;
-    font-weight: 600;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    margin-bottom: 0.5rem;
-}
-
-.login-card {
-    border: none;
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    padding: 10px;
+    background: rgba(30, 58, 138, 0.1);
 }
 
 .login-title {
+    font-size: 2rem;
+    font-weight: 700;
     color: var(--ktu-primary);
-    font-weight: 600;
+    margin-bottom: 0.5rem;
 }
 
-.input-group-lg .form-control,
-.input-group-lg .input-group-text {
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
+.login-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
 }
 
-.input-group-text {
-    background-color: #f8f9fa !important;
-    border: 1px solid #dee2e6;
+/* Form Floating Labels */
+.form-floating > .form-control {
+    height: 58px;
+    padding: 1rem 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-floating > .form-control:focus {
+    border-color: var(--ktu-primary);
+    box-shadow: 0 0 0 0.25rem rgba(30, 58, 138, 0.15);
+}
+
+.form-floating > label {
+    padding: 1rem 0.75rem;
     color: #6c757d;
+    font-weight: 500;
 }
 
-.login-btn {
-    background: linear-gradient(45deg, var(--ktu-primary), #2563eb);
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: var(--ktu-primary);
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+/* Remember Me and Forgot Password */
+.form-check-input:checked {
+    background-color: var(--ktu-primary);
+    border-color: var(--ktu-primary);
+}
+
+.forgot-password {
+    color: var(--ktu-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: #1e40af;
+    text-decoration: underline;
+}
+
+/* Login Button */
+.login-submit-btn {
+    background: linear-gradient(135deg, var(--ktu-primary) 0%, #2563eb 100%);
     border: none;
-    border-radius: 8px;
-    padding: 0.75rem 2rem;
+    border-radius: 10px;
+    padding: 0.875rem 2rem;
     font-weight: 600;
     font-size: 1.1rem;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
 }
 
-.login-btn:hover {
-    background: linear-gradient(45deg, #1e40af, var(--ktu-primary));
+.login-submit-btn:hover {
+    background: linear-gradient(135deg, #1e40af 0%, var(--ktu-primary) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+    box-shadow: 0 6px 25px rgba(30, 58, 138, 0.4);
 }
 
-.card-footer {
-    border-radius: 0 0 15px 15px;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+/* Divider */
+.login-divider {
+    text-align: center;
+    margin: 2rem 0;
+    position: relative;
 }
 
-@keyframes fadeInUp {
+.login-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e9ecef;
+}
+
+.login-divider span {
+    background: white;
+    padding: 0 1rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Alternative Actions */
+.contact-admin {
+    color: var(--ktu-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.contact-admin:hover {
+    color: #1e40af;
+    text-decoration: underline;
+}
+
+@keyframes fadeInRight {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateX(30px);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
     }
 }
 
-/* Responsive adjustments for login */
-@media (max-width: 768px) {
-    .university-logo {
-        width: 60px;
-        height: 60px;
+/* Responsive Design */
+@media (max-width: 991.98px) {
+    .login-right-panel {
+        min-height: 100vh;
     }
     
-    .university-name {
-        font-size: 1.5rem;
+    .university-title {
+        font-size: 2rem;
     }
     
-    .login-card .card-body {
-        padding: 2rem !important;
+    .university-subtitle {
+        font-size: 1rem;
     }
     
-    .min-vh-100 {
-        padding: 1rem 0;
+    .login-form-container {
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-right-panel {
+        padding: 1rem;
+    }
+    
+    .login-title {
+        font-size: 1.75rem;
+    }
+    
+    .form-floating > .form-control {
+        height: 54px;
     }
 }
