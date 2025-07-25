@@ -13,17 +13,44 @@
                 </h1>
                 <p class="dashboard-subtitle text-muted">Manage and respond to student issues</p>
             </div>
-            <div class="header-actions">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                        <i class="fas fa-filter me-2"></i>Filter Issues
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">All Issues</a></li>
-                        <li><a class="dropdown-item" href="#">Pending Only</a></li>
-                        <li><a class="dropdown-item" href="#">In Progress</a></li>
-                        <li><a class="dropdown-item" href="#">Resolved</a></li>
-                    </ul>
+<!-- Removed menu button for mobile view -->
+<div class="header-actions d-none d-md-block">
+    <div class="btn-group me-2">
+        <!-- Removed Create Subadmin button from admin dashboard header -->
+    </div>
+    <div class="btn-group me-2">
+        <!-- Removed Settings button beside Filter Issues button on admin page as requested -->
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fas fa-filter me-2"></i>Filter Issues
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">All Issues</a></li>
+            <li><a class="dropdown-item" href="#">Pending Only</a></li>
+            <li><a class="dropdown-item" href="#">In Progress</a></li>
+            <li><a class="dropdown-item" href="#">Resolved</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Mobile view menu -->
+<!-- Removed mobile direct buttons to avoid duplication with dropdown -->
+        </div>
+    </div>
+
+    <!-- Notification Card -->
+    <div class="row g-4 mb-5">
+        <div class="col-12 notification-card">
+            <div class="stat-card bg-info text-white d-flex align-items-center justify-content-center w-100">
+                <div class="stat-card-content d-flex align-items-center justify-content-center w-100">
+                    <div class="stat-icon me-3">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="text-center w-100">
+                        <h5 class="stat-number mb-1">{{ submission_count }}</h5>
+                        <p class="mb-0">New student submissions to review.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -34,36 +61,33 @@
         {% if issues %}
             {% for issue in issues %}
             <div class="admin-issue-card">
-                <div class="admin-issue-header">
-                    <div class="issue-info">
-                        <h4 class="admin-issue-title">{{ issue.subject }}</h4>
-                        <div class="student-info">
-                            <i class="fas fa-user me-1"></i>
-                            <span class="student-name">{{ issue.student_name }}</span>
-                        </div>
-                    </div>
-                    <div class="issue-meta">
-                        <span class="category-badge">{{ issue.category }}</span>
-                        {% if issue.status == 'pending' %}
-                            <span class="status-badge pending">
-                                <i class="fas fa-clock me-1"></i>Pending
-                            </span>
-                        {% elif issue.status == 'in_progress' %}
-                            <span class="status-badge progress">
-                                <i class="fas fa-cog me-1"></i>In Progress
-                            </span>
-                        {% elif issue.status == 'resolved' %}
-                            <span class="status-badge resolved">
-                                <i class="fas fa-check-circle me-1"></i>Resolved
-                            </span>
-                        {% endif %}
-                        <button type="button" class="btn btn-danger btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#deleteAdminModal{{ issue.id }}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
+            <div class="admin-issue-header" data-bs-toggle="collapse" data-bs-target="#collapseIssue{{ issue.id }}" aria-expanded="false" aria-controls="collapseIssue{{ issue.id }}" style="cursor: pointer;">
+                <div class="issue-info d-flex align-items-center">
+                    <h4 class="admin-issue-title mb-0 me-2">{{ issue.subject }}</h4>
+                    <i class="fas fa-chevron-down ms-auto toggle-icon"></i>
                 </div>
+                <div class="issue-meta">
+                    <span class="category-badge">{{ issue.category }}</span>
+                    {% if issue.status == 'pending' %}
+                        <span class="status-badge pending">
+                            <i class="fas fa-clock me-1"></i>Pending
+                        </span>
+                    {% elif issue.status == 'in_progress' %}
+                        <span class="status-badge progress">
+                            <i class="fas fa-cog me-1"></i>In Progress
+                        </span>
+                    {% elif issue.status == 'resolved' %}
+                        <span class="status-badge resolved">
+                            <i class="fas fa-check-circle me-1"></i>Resolved
+                        </span>
+                    {% endif %}
+                    <button type="button" class="btn btn-danger btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#deleteAdminModal{{ issue.id }}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
                 
-                <div class="admin-issue-body">
+                <div id="collapseIssue{{ issue.id }}" class="collapse admin-issue-body">
                     <div class="issue-description">
                         <p>{{ issue.message }}</p>
                     </div>
@@ -79,8 +103,8 @@
                     {% endif %}
                 </div>
                 
-                <div class="admin-action-section">
-                    <form method="POST" action="{{ url_for('resolve_issue', issue_id=issue.id) }}" class="admin-response-form">
+                <div class="admin-action-section collapse" id="collapseIssue{{ issue.id }}">
+<form method="POST" action="{{ url_for('admin.resolve_issue', issue_id=issue.id) }}" class="admin-response-form">
                         <div class="row g-3">
                             <div class="col-md-3">
                                 <label for="status_{{ issue.id }}" class="form-label fw-semibold">Status</label>
@@ -104,7 +128,7 @@
                     </form>
                 </div>
                 
-                <div class="admin-issue-footer">
+                <div class="admin-issue-footer collapse" id="collapseIssue{{ issue.id }}">
                     <span class="issue-date">
                         <i class="fas fa-calendar me-1"></i>
                         Submitted on {{ parse_datetime(issue.created_at) }}
@@ -126,7 +150,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <form method="POST" action="{{ url_for('delete_issue', issue_id=issue.id) }}" class="d-inline">
+<form method="POST" action="{{ url_for('admin.admin_delete_issue', issue_id=issue.id) }}" class="d-inline">
                                 <button type="submit" class="btn btn-danger">
                                     <i class="fas fa-trash me-1"></i>Delete Issue
                                 </button>

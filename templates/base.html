@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Koforidua Technical University - Student Issue Portal{% endblock %}</title>
+    <title>{% block title %}Koforidua Technical University - STUDENT CONCERN PORTAL{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
@@ -14,40 +14,57 @@
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
                 <img src="{{ url_for('static', filename='ktu-logo.png') }}" alt="KTU Logo" width="40" height="40" class="me-2">
-                <span>KTU Issue Portal</span>
+                <span>KTU STUDENT CONCERN PORTAL</span>
             </a>
-            
-            {% if g.user %}
-            <div class="navbar-nav ms-auto">
-                <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-user me-1"></i>{{ g.user.username }}
-                        <span class="badge bg-secondary ms-1">{{ g.user.role.title() }}</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        {% if g.user.role == 'student' %}
-                        <li><a class="dropdown-item" href="{{ url_for('student_dashboard') }}">
-                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
-                        </a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('submit_issue') }}">
-                            <i class="fas fa-plus me-2"></i>Submit Issue
-                        </a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('my_issues') }}">
-                            <i class="fas fa-list me-2"></i>My Issues
-                        </a></li>
-                        {% elif g.user.role == 'admin' %}
-                        <li><a class="dropdown-item" href="{{ url_for('admin_issues') }}">
-                            <i class="fas fa-cogs me-2"></i>Manage Issues
-                        </a></li>
-                        {% endif %}
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">
-                            <i class="fas fa-sign-out-alt me-2"></i>Logout
-                        </a></li>
-                    </ul>
-                </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                {% if g.user %}
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-1"></i>{{ g.user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            {% if g.user.role == 'student' %}
+                            <li><a class="dropdown-item" href="{{ url_for('student_dashboard') }}">
+                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('settings') }}">
+                                <i class="fas fa-cog me-2"></i>Settings
+                            </a></li>
+                            {# <li><a class="dropdown-item" href="{{ url_for('submit_issue') }}">
+                                <i class="fas fa-plus me-2"></i>Submit Issue
+                            </a></li> #}
+                            {# <li><a class="dropdown-item" href="{{ url_for('my_issues') }}">
+                                <i class="fas fa-list me-2"></i>My Submissions
+                            </a></li> #}
+                            {% elif g.user.role == 'admin' %}
+                            {# <li><a class="dropdown-item" href="{{ url_for('admin_issues') }}">
+                                <i class="fas fa-cogs me-2"></i>Manage Issues
+                            </a></li> #}
+                            <li><a class="dropdown-item" href="{{ url_for('admin.admin_settings') }}">
+                                <i class="fas fa-cog me-2"></i>Settings
+                            </a></li>
+                            {% elif g.user.role == 'subadmin' %}
+                            <li><a class="dropdown-item" href="{{ url_for('admin.subadmin_settings') }}">
+                                <i class="fas fa-cog me-2"></i>Settings
+                            </a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('about') }}">
+                                <i class="fas fa-info-circle me-2"></i>About
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </nav>
 
@@ -73,9 +90,9 @@
     <!-- Footer -->
     <footer class="bg-light mt-5 py-4">
         <div class="container text-center">
-            <p class="mb-0 text-muted">
-                &copy; 2025 Koforidua Technical University - Student Issue Portal
-            </p>
+                <p class="mb-0 text-muted">
+                &copy; 2025 Koforidua Technical University - Student Concern Portal<br>
+               <i style="font-size: small;"> Developed by Eleblu Nunana</i>
         </div>
     </footer>
 
