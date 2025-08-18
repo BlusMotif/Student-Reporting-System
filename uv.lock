@@ -1,4 +1,4 @@
-version = 1
+gunicorn --bind 0.0.0.0:5000 main:appversion = 1
 requires-python = ">=3.11"
 
 [[package]]

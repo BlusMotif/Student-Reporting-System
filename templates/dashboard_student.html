@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2>Student Dashboard</h2>
+            <p>Welcome, {{ user.username }}!</p>
+            
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <a href="{{ url_for('submit_issue') }}" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-plus me-2"></i>Submit New Issue
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="{{ url_for('profile') }}" class="btn btn-info btn-lg w-100">
+                        <i class="fas fa-user me-2"></i>View Profile
+                    </a>
+                </div>
+            </div>
+
+            <!-- My Issues -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>My Issues</h5>
+                </div>
+                <div class="card-body">
+                    {% if issues %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for issue in issues %}
+                                <tr>
+                                    <td>{{ issue.subject }}</td>
+                                    <td>{{ issue.category }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if issue.status == 'pending' %}badge-warning
+                                            {% elif issue.status == 'in_progress' %}badge-info
+                                            {% elif issue.status == 'resolved' %}badge-success
+                                            {% endif %}">
+                                            {{ issue.status.replace('_', ' ').title() }}
+                                        </span>
+                                    </td>
+                                    <td>{{ issue.created_at_formatted }}</td>
+                                    <td>
+                                        <a href="{{ url_for('view_issue', issue_id=issue.id) }}" class="btn btn-sm btn-primary">View</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No Issues Yet</h5>
+                        <p class="text-muted">You haven't submitted any issues yet.</p>
+                        <a href="{{ url_for('submit_issue') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Submit Your First Issue
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

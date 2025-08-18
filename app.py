@@ -237,6 +237,73 @@ def settings():
 
 from flask import g
 
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+def send_reset_email(email, token):
+    """Send password reset email using Outlook SMTP with proper authentication."""
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = 'blusmotif1@outlook.com'
+        msg['To'] = email
+        msg['Subject'] = 'Password Reset Request - Student Report System'
+
+        body = f'''Hello,
+
+You have requested to reset your password for the Student Report System.
+
+Please click the following link to reset your password:
+http://127.0.0.1:5000/reset_password/{token}
+
+If you did not request this password reset, please ignore this email.
+
+Best regards,
+Student Report System Team'''
+        
+        msg.attach(MIMEText(body, 'plain'))
+
+        # Use environment variables for security
+        email_address = os.environ.get('SMTP_EMAIL', 'blusmotif1@outlook.com')
+        email_password = os.environ.get('SMTP_PASSWORD')  # Use app password here
+        
+        if not email_password:
+            # For development only - you should use environment variables
+            print("Warning: SMTP_PASSWORD not set in environment variables")
+            return False
+
+        with smtplib.SMTP('smtp.office365.com', 587) as server:
+            server.starttls()
+            server.login(email_address, email_password)
+            server.send_message(msg)
+            
+        print(f"Password reset email sent successfully to {email}")
+        return True
+        
+    except Exception as e:
+        print(f"Failed to send email: {str(e)}")
+        return False
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email_or_phone = request.form['email'] if request.form['reset_method'] == 'email' else request.form['phone']
+        student_id = request.form['student_id']
+        
+        # Generate a token (this is a placeholder, implement your own token generation)
+        token = "generated_token"  # Replace with actual token generation logic
+        
+        send_reset_email(email_or_phone, token)
+        flash('Reset link has been sent!', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template('forgot_password.html')
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    # This would be implemented with proper token validation
+    return render_template('reset_password.html', token=token)
+
 @app.route('/about')
 def about():
     return render_template('about.html')

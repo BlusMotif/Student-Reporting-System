@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h4>User Profile</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Username:</strong></div>
+                        <div class="col-sm-9">{{ user_details.username }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Role:</strong></div>
+                        <div class="col-sm-9">
+                            <span class="badge 
+                                {% if user_details.role == 'admin' %}badge-danger
+                                {% elif user_details.role == 'subadmin' %}badge-warning
+                                {% else %}badge-primary
+                                {% endif %}">
+                                {{ user_details.role.title() }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Account Created:</strong></div>
+                        <div class="col-sm-9">{{ user_details.created_at or 'N/A' }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>User ID:</strong></div>
+                        <div class="col-sm-9">{{ user_details.id }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Account Actions</h5>
+                </div>
+                <div class="card-body">
+                    <a href="{{ url_for('change_password') }}" class="btn btn-primary">Change Password</a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

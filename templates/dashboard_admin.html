@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2>Admin Dashboard</h2>
+            <p>Welcome, {{ user.username }}!</p>
+            
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.total_issues }}</h3>
+                            <p>Total Issues</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.pending_issues }}</h3>
+                            <p>Pending</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.in_progress_issues }}</h3>
+                            <p>In Progress</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.resolved_issues }}</h3>
+                            <p>Resolved</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <a href="{{ url_for('list_users') }}" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-users me-2"></i>Manage Users
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{{ url_for('statistics') }}" class="btn btn-info btn-lg w-100">
+                        <i class="fas fa-chart-bar me-2"></i>View Statistics
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{{ url_for('submit_issue') }}" class="btn btn-success btn-lg w-100">
+                        <i class="fas fa-plus me-2"></i>Submit Issue
+                    </a>
+                </div>
+            </div>
+
+            <!-- Issues Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Recent Issues</h5>
+                </div>
+                <div class="card-body">
+                    {% if issues %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Student</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for issue in issues[:10] %}
+                                <tr>
+                                    <td>{{ issue.subject }}</td>
+                                    <td>{{ issue.student_username }}</td>
+                                    <td>{{ issue.category }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if issue.status == 'pending' %}badge-warning
+                                            {% elif issue.status == 'in_progress' %}badge-info
+                                            {% elif issue.status == 'resolved' %}badge-success
+                                            {% endif %}">
+                                            {{ issue.status.replace('_', ' ').title() }}
+                                        </span>
+                                    </td>
+                                    <td>{{ issue.created_at_formatted }}</td>
+                                    <td>
+                                        <a href="{{ url_for('view_issue', issue_id=issue.id) }}" class="btn btn-sm btn-primary">View</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No issues found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

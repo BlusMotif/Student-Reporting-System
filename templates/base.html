@@ -28,11 +28,11 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             {% if g.user.role == 'student' %}
-                            <li><a class="dropdown-item" href="{{ url_for('student_dashboard') }}">
+                            <li><a class="dropdown-item" href="{{ url_for('dashboard') }}">
                                 <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                             </a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('settings') }}">
-                                <i class="fas fa-cog me-2"></i>Settings
+                            <li><a class="dropdown-item" href="{{ url_for('profile') }}">
+                                <i class="fas fa-cog me-2"></i>Profile
                             </a></li>
                             {# <li><a class="dropdown-item" href="{{ url_for('submit_issue') }}">
                                 <i class="fas fa-plus me-2"></i>Submit Issue
@@ -44,16 +44,19 @@
                             {# <li><a class="dropdown-item" href="{{ url_for('admin_issues') }}">
                                 <i class="fas fa-cogs me-2"></i>Manage Issues
                             </a></li> #}
-                            <li><a class="dropdown-item" href="{{ url_for('admin.admin_settings') }}">
-                                <i class="fas fa-cog me-2"></i>Settings
+                            <li><a class="dropdown-item" href="{{ url_for('list_users') }}">
+                                <i class="fas fa-users me-2"></i>Manage Users
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('statistics') }}">
+                                <i class="fas fa-chart-bar me-2"></i>Statistics
                             </a></li>
                             {% elif g.user.role == 'subadmin' %}
-                            <li><a class="dropdown-item" href="{{ url_for('admin.subadmin_settings') }}">
-                                <i class="fas fa-cog me-2"></i>Settings
+                            <li><a class="dropdown-item" href="{{ url_for('list_users') }}">
+                                <i class="fas fa-users me-2"></i>Manage Users
                             </a></li>
                             {% endif %}
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('about') }}">
+                            <li><a class="dropdown-item" href="#">
                                 <i class="fas fa-info-circle me-2"></i>About
                             </a></li>
                             <li><hr class="dropdown-divider"></li>

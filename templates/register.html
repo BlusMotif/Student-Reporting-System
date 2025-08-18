@@ -4,18 +4,266 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Register</h2>
-    <form method="POST" action="{{ url_for('register') }}">
-        <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" name="username" required>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-user-plus me-2"></i>Student Registration</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-4">Please fill in all required information to create your student account.</p>
+                    
+                    <form method="POST" action="{{ url_for('register') }}" id="registrationForm">
+                        <!-- Personal Information Section -->
+                        <div class="mb-4">
+                            <h5 class="text-primary border-bottom pb-2"><i class="fas fa-user me-2"></i>Personal Information</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="first_name" class="form-label">First Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    <div class="form-text">Use your KTU email if available</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                                    <div class="form-text">Format: +233XXXXXXXXX</div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="date_of_birth" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <select class="form-select" id="gender" name="gender">
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                        <option value="prefer_not_to_say">Prefer not to say</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Academic Information Section -->
+                        <div class="mb-4">
+                            <h5 class="text-primary border-bottom pb-2"><i class="fas fa-graduation-cap me-2"></i>Academic Information</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="student_id" class="form-label">Student ID <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="student_id" name="student_id" required>
+                                    <div class="form-text">Your official KTU student ID number</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="level" class="form-label">Academic Level <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="level" name="level" required>
+                                        <option value="">Select Level</option>
+                                        <option value="100">Level 100</option>
+                                        <option value="200">Level 200</option>
+                                        <option value="300">Level 300</option>
+                                        <option value="400">Level 400</option>
+                                        <option value="graduate">Graduate</option>
+                                        <option value="postgraduate">Postgraduate</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="department" class="form-label">Department <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="department" name="department" required>
+                                        <option value="">Select Department</option>
+                                        <option value="computer_science">Computer Science</option>
+                                        <option value="information_technology">Information Technology</option>
+                                        <option value="electrical_engineering">Electrical Engineering</option>
+                                        <option value="mechanical_engineering">Mechanical Engineering</option>
+                                        <option value="civil_engineering">Civil Engineering</option>
+                                        <option value="business_administration">Business Administration</option>
+                                        <option value="accounting">Accounting</option>
+                                        <option value="marketing">Marketing</option>
+                                        <option value="hospitality_management">Hospitality Management</option>
+                                        <option value="fashion_design">Fashion Design</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="program" class="form-label">Program of Study</label>
+                                    <input type="text" class="form-control" id="program" name="program" placeholder="e.g., BSc Computer Science">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Information Section -->
+                        <div class="mb-4">
+                            <h5 class="text-primary border-bottom pb-2"><i class="fas fa-key me-2"></i>Account Information</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                    <div class="form-text">Choose a unique username for login</div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                    <div class="form-text">Minimum 8 characters with letters and numbers</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="confirm_password" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Information Section -->
+                        <div class="mb-4">
+                            <h5 class="text-primary border-bottom pb-2"><i class="fas fa-info-circle me-2"></i>Additional Information</h5>
+                            
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Residential Address</label>
+                                <textarea class="form-control" id="address" name="address" rows="2" placeholder="Your current residential address"></textarea>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="emergency_contact_name" class="form-label">Emergency Contact Name</label>
+                                    <input type="text" class="form-control" id="emergency_contact_name" name="emergency_contact_name">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="emergency_contact_phone" class="form-label">Emergency Contact Phone</label>
+                                    <input type="tel" class="form-control" id="emergency_contact_phone" name="emergency_contact_phone">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="terms_accepted" name="terms_accepted" required>
+                                <label class="form-check-label" for="terms_accepted">
+                                    I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a> and <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a> <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>Create Account
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Already have an account? <a href="{{ url_for('login') }}" class="text-decoration-none">Login here</a></p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Register</button>
-    </form>
-    <p class="mt-3">Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
+    </div>
 </div>
+
+<!-- Terms Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Terms and Conditions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Acceptance of Terms</h6>
+                <p>By registering for the KTU Student Concern Portal, you agree to abide by these terms and conditions.</p>
+                
+                <h6>2. Account Responsibility</h6>
+                <p>You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account.</p>
+                
+                <h6>3. Appropriate Use</h6>
+                <p>This portal is for legitimate academic concerns and issues. Misuse, harassment, or false reporting is prohibited.</p>
+                
+                <h6>4. Data Accuracy</h6>
+                <p>You agree to provide accurate and up-to-date information during registration and when submitting concerns.</p>
+                
+                <h6>5. Privacy</h6>
+                <p>Your personal information will be handled according to our Privacy Policy and university guidelines.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Privacy Modal -->
+<div class="modal fade" id="privacyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Privacy Policy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Information Collection</h6>
+                <p>We collect personal information necessary for student identification and communication purposes.</p>
+                
+                <h6>Information Use</h6>
+                <p>Your information is used solely for:</p>
+                <ul>
+                    <li>Account management and verification</li>
+                    <li>Processing and responding to student concerns</li>
+                    <li>Communication regarding submitted issues</li>
+                    <li>Statistical analysis for service improvement</li>
+                </ul>
+                
+                <h6>Information Sharing</h6>
+                <p>Personal information is shared only with authorized university personnel involved in resolving your concerns.</p>
+                
+                <h6>Data Security</h6>
+                <p>We implement appropriate security measures to protect your personal information against unauthorized access, alteration, or disclosure.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('registrationForm').addEventListener('submit', function(e) {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+    
+    if (password !== confirmPassword) {
+        e.preventDefault();
+        alert('Passwords do not match. Please check and try again.');
+        return false;
+    }
+    
+    if (password.length < 8) {
+        e.preventDefault();
+        alert('Password must be at least 8 characters long.');
+        return false;
+    }
+});
+</script>
 {% endblock %}

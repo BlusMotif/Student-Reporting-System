@@ -104,7 +104,7 @@
                 </div>
                 
                 <div class="admin-action-section collapse" id="collapseIssue{{ issue.id }}">
-<form method="POST" action="{{ url_for('admin.resolve_issue', issue_id=issue.id) }}" class="admin-response-form">
+<form method="POST" action="{{ url_for('update_issue', issue_id=issue.id) }}" class="admin-response-form">
                         <div class="row g-3">
                             <div class="col-md-3">
                                 <label for="status_{{ issue.id }}" class="form-label fw-semibold">Status</label>
@@ -150,7 +150,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-<form method="POST" action="{{ url_for('admin.admin_delete_issue', issue_id=issue.id) }}" class="d-inline">
+<form method="POST" action="#" class="d-inline">
                                 <button type="submit" class="btn btn-danger">
                                     <i class="fas fa-trash me-1"></i>Delete Issue
                                 </button>

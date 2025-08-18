@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Statistics{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>System Statistics</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>User Statistics</h5>
+                            <div class="row">
+                                {% for role, count in user_stats.items() %}
+                                <div class="col-md-6 mb-3">
+                                    <div class="card bg-primary text-white">
+                                        <div class="card-body text-center">
+                                            <h3>{{ count }}</h3>
+                                            <p>{{ role.title() }}{{ 's' if count != 1 else '' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Issue Statistics</h5>
+                            <div class="row">
+                                {% for status, count in issue_stats.items() %}
+                                <div class="col-md-6 mb-3">
+                                    <div class="card 
+                                        {% if status == 'pending' %}bg-warning
+                                        {% elif status == 'in_progress' %}bg-info
+                                        {% elif status == 'resolved' %}bg-success
+                                        {% else %}bg-secondary
+                                        {% endif %} text-white">
+                                        <div class="card-body text-center">
+                                            <h3>{{ count }}</h3>
+                                            <p>{{ status.replace('_', ' ').title() }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>Summary</h5>
+                            <div class="alert alert-info">
+                                <strong>System Overview:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Total Users: {{ user_stats.values() | sum }}</li>
+                                    <li>Total Issues: {{ issue_stats.values() | sum }}</li>
+                                    <li>Database: Firebase Realtime Database</li>
+                                    <li>Status: Operational</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

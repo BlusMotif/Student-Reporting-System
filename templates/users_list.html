@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Users List{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>System Users</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h5>User Statistics</h5>
+                            <div class="row">
+                                {% for role, count in role_counts.items() %}
+                                <div class="col-md-4">
+                                    <div class="card bg-light">
+                                        <div class="card-body text-center">
+                                            <h3>{{ count }}</h3>
+                                            <p>{{ role.title() }}{{ 's' if count != 1 else '' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Role</th>
+                                    <th>Created</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user_item in users %}
+                                <tr>
+                                    <td>{{ user_item.username }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if user_item.role == 'admin' %}badge-danger
+                                            {% elif user_item.role == 'subadmin' %}badge-warning
+                                            {% else %}badge-primary
+                                            {% endif %}">
+                                            {{ user_item.role.title() }}
+                                        </span>
+                                    </td>
+                                    <td>{{ user_item.created_at or 'N/A' }}</td>
+                                    <td>
+                                        <span class="badge badge-success">Active</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}View Issue{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Issue Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Subject:</strong></div>
+                        <div class="col-sm-9">{{ issue.subject }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Category:</strong></div>
+                        <div class="col-sm-9">{{ issue.category }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Student:</strong></div>
+                        <div class="col-sm-9">{{ issue.student_username }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Status:</strong></div>
+                        <div class="col-sm-9">
+                            <span class="badge 
+                                {% if issue.status == 'pending' %}badge-warning
+                                {% elif issue.status == 'in_progress' %}badge-info
+                                {% elif issue.status == 'resolved' %}badge-success
+                                {% endif %}">
+                                {{ issue.status.replace('_', ' ').title() }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Created:</strong></div>
+                        <div class="col-sm-9">{{ issue.created_at_formatted }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Message:</strong></div>
+                        <div class="col-sm-9">
+                            <div class="border p-3 bg-light">
+                                {{ issue.message }}
+                            </div>
+                        </div>
+                    </div>
+                    {% if issue.response %}
+                    <div class="row mb-3">
+                        <div class="col-sm-3"><strong>Response:</strong></div>
+                        <div class="col-sm-9">
+                            <div class="border p-3 bg-success text-white">
+                                {{ issue.response }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if user.role in ['admin', 'subadmin'] %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Update Issue</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('update_issue', issue_id=issue.id) }}">
+                        <div class="form-group">
+                            <label for="status">Status:</label>
+                            <select class="form-control" id="status" name="status" required>
+                                <option value="pending" {% if issue.status == 'pending' %}selected{% endif %}>Pending</option>
+                                <option value="in_progress" {% if issue.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                                <option value="resolved" {% if issue.status == 'resolved' %}selected{% endif %}>Resolved</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="response">Response:</label>
+                            <textarea class="form-control" id="response" name="response" rows="4">{{ issue.response or '' }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Issue</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="mt-3">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
