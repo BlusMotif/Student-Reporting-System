@@ -17,6 +17,10 @@ class NotificationService:
         # Set a proper from email address
         self.from_email = os.environ.get('FROM_EMAIL', 'noreply@ktu.edu.gh')
         
+        # Import Firebase DB for dynamic settings
+        from firebase_simple import simple_firebase_db
+        self.firebase_db = simple_firebase_db
+        
         # SMS configuration (using a simple SMS API - you can replace with your preferred provider)
         self.sms_api_key = os.environ.get('SMS_API_KEY', '')
         self.sms_api_url = os.environ.get('SMS_API_URL', 'https://api.sms-provider.com/send')

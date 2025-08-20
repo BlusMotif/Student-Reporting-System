@@ -1,0 +1,578 @@
+{% extends "base.html" %}
+
+{% block title %}System Settings - {{ settings.system_info.name if settings else 'KTU Student Portal' }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-cogs me-2"></i>System Settings</h2>
+                <button type="button" class="btn btn-success" onclick="saveAllSettings()">
+                    <i class="fas fa-save me-2"></i>Save All Changes
+                </button>
+            </div>
+            
+            <!-- Navigation Tabs -->
+            <ul class="nav nav-tabs" id="settingsTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" id="system-tab" data-bs-toggle="tab" href="#system">
+                        <i class="fas fa-info-circle me-2"></i>System Info
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="categories-tab" data-bs-toggle="tab" href="#categories">
+                        <i class="fas fa-tags me-2"></i>Categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="academic-tab" data-bs-toggle="tab" href="#academic">
+                        <i class="fas fa-graduation-cap me-2"></i>Academic Levels
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="prefixes-tab" data-bs-toggle="tab" href="#prefixes">
+                        <i class="fas fa-hashtag me-2"></i>Index Prefixes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="email-tab" data-bs-toggle="tab" href="#email">
+                        <i class="fas fa-envelope me-2"></i>Email Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="registration-tab" data-bs-toggle="tab" href="#registration">
+                        <i class="fas fa-user-plus me-2"></i>Registration
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="messages-tab" data-bs-toggle="tab" href="#messages">
+                        <i class="fas fa-comment me-2"></i>Messages
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content mt-4" id="settingsTabContent">
+                <!-- System Info Tab -->
+                <div class="tab-pane fade show active" id="system">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle me-2"></i>System Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="systemInfoForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="systemName" class="form-label">System Name</label>
+                                        <input type="text" class="form-control" id="systemName" name="system_info.name" 
+                                               value="{{ settings.system_info.name if settings else 'KTU Student Portal' }}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="systemFullName" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="systemFullName" name="system_info.full_name"
+                                               value="{{ settings.system_info.full_name if settings else 'Koforidua Technical University Student Portal' }}">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="systemDescription" class="form-label">Description</label>
+                                    <textarea class="form-control" id="systemDescription" name="system_info.description" rows="3">{{ settings.system_info.description if settings else 'Submit and track your academic concerns' }}</textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="contactEmail" class="form-label">Contact Email</label>
+                                        <input type="email" class="form-control" id="contactEmail" name="system_info.contact_email"
+                                               value="{{ settings.system_info.contact_email if settings else 'support@ktu.edu.gh' }}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="contactPhone" class="form-label">Contact Phone</label>
+                                        <input type="text" class="form-control" id="contactPhone" name="system_info.phone"
+                                               value="{{ settings.system_info.phone if settings else '+233-000-000-000' }}">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Tab -->
+                <div class="tab-pane fade" id="categories">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5><i class="fas fa-tags me-2"></i>Concern Categories</h5>
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                                <i class="fas fa-plus me-1"></i>Add Category
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="categoriesList">
+                                {% if settings and settings.categories %}
+                                    {% for key, category in settings.categories.items() %}
+                                    <div class="row mb-3 category-item" data-key="{{ key }}">
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control category-key" value="{{ key }}" readonly>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control category-name" value="{{ category.name }}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control category-description" value="{{ category.description }}">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="removeCategory('{{ key }}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Levels Tab -->
+                <div class="tab-pane fade" id="academic">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5><i class="fas fa-graduation-cap me-2"></i>Academic Levels</h5>
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addLevelModal">
+                                <i class="fas fa-plus me-1"></i>Add Level
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="levelsList">
+                                {% if settings and settings.academic_levels %}
+                                    {% for key, level in settings.academic_levels.items() %}
+                                    <div class="row mb-3 level-item" data-key="{{ key }}">
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control level-key" value="{{ key }}" readonly>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control level-name" value="{{ level }}">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="removeLevel('{{ key }}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Index Prefixes Tab -->
+                <div class="tab-pane fade" id="prefixes">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5><i class="fas fa-hashtag me-2"></i>Index Number Prefixes</h5>
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addPrefixModal">
+                                <i class="fas fa-plus me-1"></i>Add Prefix
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="prefixesList">
+                                {% if settings and settings.index_prefixes %}
+                                    {% for prefix, description in settings.index_prefixes.items() %}
+                                    <div class="row mb-3 prefix-item" data-key="{{ prefix }}">
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control prefix-key" value="{{ prefix }}" readonly>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control prefix-description" value="{{ description }}">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="removePrefix('{{ prefix }}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Settings Tab -->
+                <div class="tab-pane fade" id="email">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-envelope me-2"></i>Email Configuration</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="emailSettingsForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="fromName" class="form-label">From Name</label>
+                                        <input type="text" class="form-control" id="fromName" name="email_settings.from_name"
+                                               value="{{ settings.email_settings.from_name if settings else 'KTU Student Portal' }}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="fromEmail" class="form-label">From Email</label>
+                                        <input type="email" class="form-control" id="fromEmail" name="email_settings.from_email"
+                                               value="{{ settings.email_settings.from_email if settings else 'noreply@ktu.edu.gh' }}">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="supportEmail" class="form-label">Support Email</label>
+                                    <input type="email" class="form-control" id="supportEmail" name="email_settings.support_email"
+                                           value="{{ settings.email_settings.support_email if settings else 'support@ktu.edu.gh' }}">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Settings Tab -->
+                <div class="tab-pane fade" id="registration">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-user-plus me-2"></i>Registration Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="registrationSettingsForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="emailDomain" class="form-label">Allowed Email Domain</label>
+                                        <input type="text" class="form-control" id="emailDomain" name="registration_settings.allowed_email_domain"
+                                               value="{{ settings.registration_settings.allowed_email_domain if settings else '@ktu.edu.gh' }}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="minPasswordLength" class="form-label">Minimum Password Length</label>
+                                        <input type="number" class="form-control" id="minPasswordLength" name="registration_settings.min_password_length"
+                                               value="{{ settings.registration_settings.min_password_length if settings else 8 }}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="requireEmailVerification" 
+                                                   name="registration_settings.require_email_verification"
+                                                   {{ 'checked' if settings and settings.registration_settings.require_email_verification else 'checked' }}>
+                                            <label class="form-check-label" for="requireEmailVerification">
+                                                Require Email Verification
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="requireIndexPrefix"
+                                                   name="registration_settings.require_index_prefix"
+                                                   {{ 'checked' if settings and settings.registration_settings.require_index_prefix else '' }}>
+                                            <label class="form-check-label" for="requireIndexPrefix">
+                                                Require Specific Index Prefix
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Messages Tab -->
+                <div class="tab-pane fade" id="messages">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-comment me-2"></i>System Messages</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="messagesForm">
+                                {% if settings and settings.notification_messages %}
+                                    {% for key, message in settings.notification_messages.items() %}
+                                    <div class="mb-3">
+                                        <label for="msg_{{ key }}" class="form-label">{{ key.replace('_', ' ').title() }}</label>
+                                        <textarea class="form-control" id="msg_{{ key }}" name="notification_messages.{{ key }}" rows="2">{{ message }}</textarea>
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Category Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addCategoryForm">
+                    <div class="mb-3">
+                        <label for="newCategoryKey" class="form-label">Category Key</label>
+                        <input type="text" class="form-control" id="newCategoryKey" required>
+                        <div class="form-text">Lowercase, no spaces (e.g., 'library_issues')</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newCategoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="newCategoryName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newCategoryDescription" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="newCategoryDescription" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="addCategory()">Add Category</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Level Modal -->
+<div class="modal fade" id="addLevelModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Academic Level</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addLevelForm">
+                    <div class="mb-3">
+                        <label for="newLevelKey" class="form-label">Level Key</label>
+                        <input type="text" class="form-control" id="newLevelKey" required>
+                        <div class="form-text">e.g., '500' or 'masters'</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newLevelName" class="form-label">Level Name</label>
+                        <input type="text" class="form-control" id="newLevelName" required>
+                        <div class="form-text">e.g., 'Level 500' or 'Masters Degree'</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="addLevel()">Add Level</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Prefix Modal -->
+<div class="modal fade" id="addPrefixModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Index Prefix</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addPrefixForm">
+                    <div class="mb-3">
+                        <label for="newPrefixKey" class="form-label">Prefix</label>
+                        <input type="text" class="form-control" id="newPrefixKey" required>
+                        <div class="form-text">e.g., 'CS', 'IT', 'ENG'</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPrefixDescription" class="form-label">Department/Program</label>
+                        <input type="text" class="form-control" id="newPrefixDescription" required>
+                        <div class="form-text">e.g., 'Computer Science', 'Information Technology'</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="addPrefix()">Add Prefix</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function saveAllSettings() {
+    const formData = new FormData();
+    
+    // Collect all form data
+    const forms = ['systemInfoForm', 'emailSettingsForm', 'registrationSettingsForm', 'messagesForm'];
+    forms.forEach(formId => {
+        const form = document.getElementById(formId);
+        if (form) {
+            const inputs = form.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    formData.append(input.name, input.checked);
+                } else {
+                    formData.append(input.name, input.value);
+                }
+            });
+        }
+    });
+    
+    // Collect categories
+    const categories = {};
+    document.querySelectorAll('.category-item').forEach(item => {
+        const key = item.dataset.key;
+        const name = item.querySelector('.category-name').value;
+        const description = item.querySelector('.category-description').value;
+        categories[key] = { name, description };
+    });
+    formData.append('categories', JSON.stringify(categories));
+    
+    // Collect academic levels
+    const levels = {};
+    document.querySelectorAll('.level-item').forEach(item => {
+        const key = item.dataset.key;
+        const name = item.querySelector('.level-name').value;
+        levels[key] = name;
+    });
+    formData.append('academic_levels', JSON.stringify(levels));
+    
+    // Collect index prefixes
+    const prefixes = {};
+    document.querySelectorAll('.prefix-item').forEach(item => {
+        const key = item.dataset.key;
+        const description = item.querySelector('.prefix-description').value;
+        prefixes[key] = description;
+    });
+    formData.append('index_prefixes', JSON.stringify(prefixes));
+    
+    // Submit via AJAX
+    fetch('{{ url_for("admin.update_system_settings") }}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Settings saved successfully!');
+            location.reload();
+        } else {
+            alert('Error saving settings: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error);
+    });
+}
+
+function addCategory() {
+    const key = document.getElementById('newCategoryKey').value;
+    const name = document.getElementById('newCategoryName').value;
+    const description = document.getElementById('newCategoryDescription').value;
+    
+    if (!key || !name || !description) {
+        alert('Please fill all fields');
+        return;
+    }
+    
+    // Add to UI
+    const html = `
+        <div class="row mb-3 category-item" data-key="${key}">
+            <div class="col-md-3">
+                <input type="text" class="form-control category-key" value="${key}" readonly>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control category-name" value="${name}">
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control category-description" value="${description}">
+            </div>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeCategory('${key}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    document.getElementById('categoriesList').insertAdjacentHTML('beforeend', html);
+    
+    // Close modal and clear form
+    bootstrap.Modal.getInstance(document.getElementById('addCategoryModal')).hide();
+    document.getElementById('addCategoryForm').reset();
+}
+
+function removeCategory(key) {
+    if (confirm('Are you sure you want to remove this category?')) {
+        document.querySelector(`[data-key="${key}"]`).remove();
+    }
+}
+
+function addLevel() {
+    const key = document.getElementById('newLevelKey').value;
+    const name = document.getElementById('newLevelName').value;
+    
+    if (!key || !name) {
+        alert('Please fill all fields');
+        return;
+    }
+    
+    const html = `
+        <div class="row mb-3 level-item" data-key="${key}">
+            <div class="col-md-4">
+                <input type="text" class="form-control level-key" value="${key}" readonly>
+            </div>
+            <div class="col-md-7">
+                <input type="text" class="form-control level-name" value="${name}">
+            </div>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeLevel('${key}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    document.getElementById('levelsList').insertAdjacentHTML('beforeend', html);
+    
+    bootstrap.Modal.getInstance(document.getElementById('addLevelModal')).hide();
+    document.getElementById('addLevelForm').reset();
+}
+
+function removeLevel(key) {
+    if (confirm('Are you sure you want to remove this level?')) {
+        document.querySelector(`[data-key="${key}"]`).remove();
+    }
+}
+
+function addPrefix() {
+    const key = document.getElementById('newPrefixKey').value;
+    const description = document.getElementById('newPrefixDescription').value;
+    
+    if (!key || !description) {
+        alert('Please fill all fields');
+        return;
+    }
+    
+    const html = `
+        <div class="row mb-3 prefix-item" data-key="${key}">
+            <div class="col-md-3">
+                <input type="text" class="form-control prefix-key" value="${key}" readonly>
+            </div>
+            <div class="col-md-8">
+                <input type="text" class="form-control prefix-description" value="${description}">
+            </div>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-danger btn-sm" onclick="removePrefix('${key}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    document.getElementById('prefixesList').insertAdjacentHTML('beforeend', html);
+    
+    bootstrap.Modal.getInstance(document.getElementById('addPrefixModal')).hide();
+    document.getElementById('addPrefixForm').reset();
+}
+
+function removePrefix(key) {
+    if (confirm('Are you sure you want to remove this prefix?')) {
+        document.querySelector(`[data-key="${key}"]`).remove();
+    }
+}
+</script>
+{% endblock %}

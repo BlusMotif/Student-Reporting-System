@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Submit Issue - Koforidua Technical University{% endblock %}
+{% block title %}Submit Issue - {{ g.dynamic_settings.system_info.full_name if g.dynamic_settings else 'Koforidua Technical University' }}{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
@@ -23,14 +23,20 @@
                         <label for="category" class="form-label">Category *</label>
                         <select class="form-select" id="category" name="category" required>
                             <option value="">Select a category</option>
-                            <option value="academic">Academic Issues</option>
-                            <option value="administrative">Administrative</option>
-                            <option value="technical">Technical Support</option>
-                            <option value="hostel">Hostel & Accommodation</option>
-                            <option value="fee">Fee & Finance</option>
-                            <option value="library">Library Services</option>
-                            <option value="transport">Transportation</option>
-                            <option value="other">Other</option>
+                            {% if g.dynamic_settings and g.dynamic_settings.categories %}
+                                {% for key, category in g.dynamic_settings.categories.items() %}
+                                    <option value="{{ key }}">{{ category.name }}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="academic">Academic Issues</option>
+                                <option value="administrative">Administrative</option>
+                                <option value="technical">Technical Support</option>
+                                <option value="hostel">Hostel & Accommodation</option>
+                                <option value="fee">Fee & Finance</option>
+                                <option value="library">Library Services</option>
+                                <option value="transport">Transportation</option>
+                                <option value="other">Other</option>
+                            {% endif %}
                         </select>
                     </div>
                     

@@ -31,6 +31,14 @@ def load_logged_in_user():
             g.user = None
         else:
             g.user = {"id": user["id"], "username": user["username"], "role": user["role"]}
+    
+    # Load system settings for all templates
+    g.dynamic_settings = simple_firebase_db.get_system_settings()
+    
+    # Initialize default settings if none exist (first time setup)
+    if not g.dynamic_settings or not g.dynamic_settings.get('system_info'):
+        simple_firebase_db.initialize_default_settings()
+        g.dynamic_settings = simple_firebase_db.get_system_settings()
 
 @app.route('/')
 def index():
@@ -61,17 +69,20 @@ def register():
             flash('All required fields must be filled.', 'error')
             return render_template('register.html')
         
-        # KTU institutional email validation
-        if not email.endswith('@ktu.edu.gh'):
-            flash('Email must be a KTU institutional email (@ktu.edu.gh)', 'error')
+        # Get dynamic email domain from settings
+        allowed_domain = simple_firebase_db.get_setting('registration_settings.allowed_email_domain') or '@ktu.edu.gh'
+        if not email.endswith(allowed_domain):
+            flash(f'Email must be from the institutional domain ({allowed_domain})', 'error')
             return render_template('register.html')
         
         if password != confirm_password:
             flash('Passwords do not match.', 'error')
             return render_template('register.html')
         
-        if len(password) < 8:
-            flash('Password must be at least 8 characters long.', 'error')
+        # Get dynamic password length from settings
+        min_length = simple_firebase_db.get_setting('registration_settings.min_password_length') or 8
+        if len(password) < min_length:
+            flash(f'Password must be at least {min_length} characters long.', 'error')
             return render_template('register.html')
         
         if gender not in ['M', 'F']:
@@ -103,7 +114,8 @@ def register():
             )
             
             if success:
-                flash('Registration successful! Please check your email for verification code.', 'success')
+                success_msg = simple_firebase_db.get_setting('notification_messages.registration_success') or 'Registration successful! Please check your email for verification code.'
+                flash(success_msg, 'success')
                 return redirect(url_for('verify_email', user_id=user_id))
             else:
                 flash('Registration successful but failed to send verification email. Please contact support.', 'warning')
@@ -127,10 +139,12 @@ def login():
         user = simple_firebase_db.verify_password(username, password)
         if user:
             session['username'] = user['username']
-            flash('Login successful!', 'success')
+            success_msg = simple_firebase_db.get_setting('notification_messages.login_success') or 'Login successful!'
+            flash(success_msg, 'success')
             return redirect(url_for('dashboard'))
         else:
-            flash('Invalid username or password.', 'error')
+            error_msg = simple_firebase_db.get_setting('notification_messages.invalid_credentials') or 'Invalid username or password.'
+            flash(error_msg, 'error')
             return render_template('login.html')
     
     return render_template('login.html')
@@ -216,7 +230,8 @@ def verify_email(user_id):
                 success = simple_firebase_db._make_request(f'users/{user_id}', 'PUT', user)
                 
                 if success:
-                    flash('Email verified successfully! You can now log in.', 'success')
+                    success_msg = simple_firebase_db.get_setting('notification_messages.email_verified_success') or 'Email verified successfully! You can now log in.'
+                    flash(success_msg, 'success')
                     return redirect(url_for('login'))
                 else:
                     flash('Failed to update verification status. Please try again.', 'error')
@@ -324,15 +339,18 @@ def submit_issue():
         message = request.form['message']
         
         if not subject or not category or not message:
-            flash('All fields are required.', 'error')
+            error_msg = g.dynamic_settings.get('notification_messages', {}).get('all_fields_required') if g.dynamic_settings else 'All fields are required.'
+            flash(error_msg, 'error')
             return render_template('submit_issue.html')
         
         issue_id, result_message = simple_firebase_db.create_issue(g.user['id'], subject, category, message)
         if issue_id:
-            flash('Issue submitted successfully!', 'success')
+            success_msg = g.dynamic_settings.get('notification_messages', {}).get('issue_submitted_success') if g.dynamic_settings else 'Issue submitted successfully!'
+            flash(success_msg, 'success')
             return redirect(url_for('dashboard'))
         else:
-            flash(f'Failed to submit issue: {result_message}', 'error')
+            error_msg = g.dynamic_settings.get('notification_messages', {}).get('issue_submission_failed') if g.dynamic_settings else f'Failed to submit issue: {result_message}'
+            flash(error_msg, 'error')
             return render_template('submit_issue.html')
     
     return render_template('submit_issue.html')

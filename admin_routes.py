@@ -1,5 +1,5 @@
 from werkzeug.security import generate_password_hash
-from flask import Blueprint, render_template, request, redirect, url_for, flash, g
+from flask import Blueprint, render_template, request, redirect, url_for, flash, g, jsonify
 from firebase_simple import simple_firebase_db
 
 admin_bp = Blueprint('admin', __name__)
@@ -165,5 +165,68 @@ def system_settings():
         flash('Access denied. Supa Admin privileges required.', 'error')
         return redirect(url_for('admin.admin_dashboard'))
     
-    # This will manage categories, index prefixes, and other dynamic settings
-    return render_template('system_settings.html')
+    # Initialize default settings if none exist
+    simple_firebase_db.initialize_default_settings()
+    
+    # Get current settings
+    settings = simple_firebase_db.get_system_settings()
+    
+    return render_template('system_settings.html', settings=settings)
+
+@admin_bp.route('/admin/update-system-settings', methods=['POST'])
+def update_system_settings():
+    # Only Supa Admin can update system-wide settings
+    if not g.user or g.user['role'] != 'supaadmin':
+        return {'success': False, 'error': 'Access denied'}, 403
+    
+    try:
+        # Get form data
+        settings = {}
+        
+        # System info
+        settings['system_info'] = {
+            'name': request.form.get('system_info.name', 'KTU Student Portal'),
+            'full_name': request.form.get('system_info.full_name', 'Koforidua Technical University Student Portal'),
+            'description': request.form.get('system_info.description', 'Submit and track your academic concerns'),
+            'contact_email': request.form.get('system_info.contact_email', 'support@ktu.edu.gh'),
+            'phone': request.form.get('system_info.phone', '+233-000-000-000')
+        }
+        
+        # Email settings
+        settings['email_settings'] = {
+            'from_name': request.form.get('email_settings.from_name', 'KTU Student Portal'),
+            'from_email': request.form.get('email_settings.from_email', 'noreply@ktu.edu.gh'),
+            'support_email': request.form.get('email_settings.support_email', 'support@ktu.edu.gh')
+        }
+        
+        # Registration settings
+        settings['registration_settings'] = {
+            'require_email_verification': request.form.get('registration_settings.require_email_verification') == 'true',
+            'allowed_email_domain': request.form.get('registration_settings.allowed_email_domain', '@ktu.edu.gh'),
+            'min_password_length': int(request.form.get('registration_settings.min_password_length', 8)),
+            'require_index_prefix': request.form.get('registration_settings.require_index_prefix') == 'true'
+        }
+        
+        # Parse JSON data
+        import json
+        settings['categories'] = json.loads(request.form.get('categories', '{}'))
+        settings['academic_levels'] = json.loads(request.form.get('academic_levels', '{}'))
+        settings['index_prefixes'] = json.loads(request.form.get('index_prefixes', '{}'))
+        
+        # Notification messages
+        settings['notification_messages'] = {}
+        for key in request.form:
+            if key.startswith('notification_messages.'):
+                msg_key = key.replace('notification_messages.', '')
+                settings['notification_messages'][msg_key] = request.form.get(key)
+        
+        # Update settings in Firebase
+        success = simple_firebase_db.update_system_settings(settings)
+        
+        if success:
+            return {'success': True}
+        else:
+            return {'success': False, 'error': 'Failed to update settings'}
+    
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
