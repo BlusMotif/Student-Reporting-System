@@ -14,6 +14,8 @@ class NotificationService:
         self.smtp_port = int(os.environ.get('SMTP_PORT', '587'))
         self.email_user = os.environ.get('EMAIL_USER', 'gmass')
         self.email_password = os.environ.get('EMAIL_PASSWORD', 'a7f361ce-fc7b-41c3-8b2f-d163dd30d95b')
+        # Set a proper from email address
+        self.from_email = os.environ.get('FROM_EMAIL', 'noreply@ktu.edu.gh')
         
         # SMS configuration (using a simple SMS API - you can replace with your preferred provider)
         self.sms_api_key = os.environ.get('SMS_API_KEY', '')
@@ -21,10 +23,15 @@ class NotificationService:
         
     def send_email(self, to_email, subject, html_content, text_content=None):
         """Send email using SMTP"""
+        print(f"🔄 Attempting to send email to: {to_email}")
+        print(f"📧 Using SMTP: {self.smtp_server}:{self.smtp_port}")
+        print(f"👤 Auth user: {self.email_user}")
+        print(f"📨 From: {self.from_email}")
+        
         try:
             # Create message
             msg = MIMEMultipart('alternative')
-            msg['From'] = self.email_user
+            msg['From'] = f"KTU Student Portal <{self.from_email}>"
             msg['To'] = to_email
             msg['Subject'] = subject
             
@@ -37,7 +44,10 @@ class NotificationService:
             html_part = MIMEText(html_content, 'html')
             msg.attach(html_part)
             
+            print("📝 Message created successfully")
+            
             # Connect to server and send email with improved error handling
+            print("🔗 Connecting to SMTP server...")
             if self.smtp_port == 465:
                 # Use SSL for port 465
                 server = smtplib.SMTP_SSL(self.smtp_server, self.smtp_port)
@@ -46,23 +56,33 @@ class NotificationService:
                 server = smtplib.SMTP(self.smtp_server, self.smtp_port)
                 server.starttls()
             
+            print("🔒 Starting TLS and authenticating...")
+            
             # Try authentication
             try:
                 server.login(self.email_user, self.email_password)
+                print("✅ Authentication successful")
             except smtplib.SMTPAuthenticationError as auth_error:
+                print(f"❌ Authentication failed: {auth_error}")
                 server.quit()
                 return False, f"Authentication failed: {str(auth_error)}. Check your app password."
             
+            print("📤 Sending email...")
             text = msg.as_string()
-            server.sendmail(self.email_user, to_email, text)
+            server.sendmail(self.from_email, to_email, text)
             server.quit()
             
+            print("✅ Email sent successfully!")
             return True, "Email sent successfully"
             
         except smtplib.SMTPException as smtp_error:
-            return False, f"SMTP Error: {str(smtp_error)}"
+            error_msg = f"SMTP Error: {str(smtp_error)}"
+            print(f"❌ {error_msg}")
+            return False, error_msg
         except Exception as e:
-            return False, f"Failed to send email: {str(e)}"
+            error_msg = f"Failed to send email: {str(e)}"
+            print(f"❌ {error_msg}")
+            return False, error_msg
     
     def send_sms(self, phone_number, message):
         """Send SMS using SMS API"""
