@@ -1,0 +1,72 @@
+
+📘 Student Concern Portal - Categories & Roles Documentation
+
+------------------------------------------------------------
+System Context:
+------------------------------------------------------------
+This system is a Student Concern Portal for the Computer Science Department. 
+It is dynamic, real-time (using Firebase Database), with no hard coding. 
+It uses a light theme with blue headers and institutional email verification.
+
+------------------------------------------------------------
+Concern Categories & Role Activities
+------------------------------------------------------------
+
+1. Academic
+- Examples: Lecture scheduling, course content, lecturer availability.
+- Student: Submit academic concern.
+- Sub Admin: Review, respond, resolve, and categorize.
+- Supa Admin: Add/update category name if needed (but does not resolve).
+
+2. Exams & Grades
+- Examples: Missing grades, timetable clashes, remark requests.
+- Student: Submit exam/grade-related concern.
+- Sub Admin: Handle and respond to the issue.
+- Supa Admin: Maintain/report category only.
+
+3. Technical
+- Examples: Portal login issues, email not working, lab/software problems.
+- Student: Report technical issues.
+- Sub Admin: Resolve or escalate.
+- Supa Admin: Manage this category in settings.
+
+4. Administration
+- Examples: Registration errors, ID card issues, fee clearance.
+- Student: Submit administrative concern.
+- Sub Admin: Process and provide feedback.
+- Supa Admin: Manage category labels/settings.
+
+5. Facilities
+- Examples: Library access, lab availability, study spaces, equipment.
+- Student: Report facility/resource issues.
+- Sub Admin: Monitor and respond.
+- Supa Admin: Maintain this category in system settings.
+
+6. Welfare
+- Examples: Counseling requests, conflicts, special needs support.
+- Student: Request help under welfare.
+- Sub Admin: Respond and support.
+- Supa Admin: Keep/update welfare category settings.
+
+7. Other
+- Examples: Any concern not fitting above categories.
+- Student: Submit as "Other".
+- Sub Admin: Reassign to proper category or handle directly.
+- Supa Admin: Ensure “Other” category exists for flexibility.
+
+------------------------------------------------------------
+Role Summary with Categories
+------------------------------------------------------------
+Category        | Student Action        | Sub Admin Action       | Supa Admin Action
+-----------------------------------------------------------------------------------
+Academic        | Submit concern        | Review/resolve         | Manage category settings
+Exams & Grades  | Submit concern        | Review/resolve         | Manage category settings
+Technical       | Report issue          | Respond/resolve        | Manage category settings
+Administration  | Submit concern        | Process/feedback       | Manage category settings
+Facilities      | Report issue          | Monitor/respond        | Manage category settings
+Welfare         | Request help          | Support/respond        | Manage category settings
+Other           | Submit flexible issue | Handle/reassign        | Ensure category exists
+
+------------------------------------------------------------
+End of Documentation
+------------------------------------------------------------

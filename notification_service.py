@@ -9,11 +9,11 @@ import json
 
 class NotificationService:
     def __init__(self):
-        # Email configuration
-        self.smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+        # Email configuration - gmass.co SMTP
+        self.smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmass.co')
         self.smtp_port = int(os.environ.get('SMTP_PORT', '587'))
-        self.email_user = os.environ.get('EMAIL_USER', 'your-email@gmail.com')
-        self.email_password = os.environ.get('EMAIL_PASSWORD', 'your-app-password')
+        self.email_user = os.environ.get('EMAIL_USER', 'gmass')
+        self.email_password = os.environ.get('EMAIL_PASSWORD', 'a7f361ce-fc7b-41c3-8b2f-d163dd30d95b')
         
         # SMS configuration (using a simple SMS API - you can replace with your preferred provider)
         self.sms_api_key = os.environ.get('SMS_API_KEY', '')
