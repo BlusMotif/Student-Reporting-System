@@ -61,14 +61,9 @@ def register():
             flash('All required fields must be filled.', 'error')
             return render_template('register.html')
         
-        # CS Department email validation
-        if not email.endswith('@cs.ktu.edu.gh'):
-            flash('Email must be from CS department (@cs.ktu.edu.gh)', 'error')
-            return render_template('register.html')
-        
-        # Index number validation for CS department
-        if not student_id.startswith('CS'):
-            flash('Index number must start with "CS" for Computer Science department', 'error')
+        # KTU institutional email validation
+        if not email.endswith('@ktu.edu.gh'):
+            flash('Email must be a KTU institutional email (@ktu.edu.gh)', 'error')
             return render_template('register.html')
         
         if password != confirm_password:
@@ -83,7 +78,7 @@ def register():
             flash('Gender must be M (Male) or F (Female)', 'error')
             return render_template('register.html')
         
-        # Prepare CS department specific data
+        # Prepare student registration data
         additional_data = {
             'first_name': first_name,
             'last_name': last_name,
@@ -91,13 +86,11 @@ def register():
             'student_id': student_id,
             'level': level,
             'gender': gender,
-            'department': 'Computer Science',
-            'program': 'Computer Science',
             'email_verified': False,  # Email verification required
             'verification_code': None
         }
         
-        # Create new CS student user
+        # Create new student user
         user_id, message = simple_firebase_db.create_user(username, password, 'student', **additional_data)
         if user_id:
             # Generate and send verification code

@@ -200,7 +200,7 @@ Link expires in 1 hour. If you didn't request this, ignore this message."""
     
     def send_verification_email(self, to_email, user_name, verification_code):
         """Send email verification code"""
-        subject = "Email Verification - CS Department Portal"
+        subject = "Email Verification - KTU Student Portal"
         
         html_content = f"""
         <!DOCTYPE html>
@@ -233,7 +233,7 @@ Link expires in 1 hour. If you didn't request this, ignore this message."""
             <div class="container">
                 <div class="header">
                     <h1>📧 Email Verification</h1>
-                    <p>Computer Science Department - KTU Portal</p>
+                    <p>Koforidua Technical University - Student Portal</p>
                 </div>
                 
                 <div class="content">
@@ -256,15 +256,15 @@ Link expires in 1 hour. If you didn't request this, ignore this message."""
                         </ul>
                     </div>
                     
-                    <p>If you need help, contact the CS Department at cs@ktu.edu.gh</p>
+                    <p>If you need help, contact IT Support at itsupport@ktu.edu.gh</p>
                     
                     <p>Best regards,<br>
-                    CS Department<br>
+                    IT Support Team<br>
                     Koforidua Technical University</p>
                 </div>
                 
                 <div class="footer">
-                    <p>© 2025 Koforidua Technical University - Computer Science Department<br>
+                    <p>© 2025 Koforidua Technical University<br>
                     This is an automated message, please do not reply to this email.</p>
                 </div>
             </div>
@@ -287,7 +287,7 @@ Link expires in 1 hour. If you didn't request this, ignore this message."""
         If you didn't create an account, please ignore this email.
         
         Best regards,
-        CS Department
+        IT Support Team
         Koforidua Technical University
         """
         

@@ -37,9 +37,9 @@ def create_subadmin():
         first_name = request.form.get('first_name', '').strip()
         last_name = request.form.get('last_name', '').strip()
 
-        # Validate CS department email
-        if not email.endswith('@cs.ktu.edu.gh'):
-            flash('Email must be from CS department (@cs.ktu.edu.gh)', 'error')
+        # Validate KTU institutional email
+        if not email.endswith('@ktu.edu.gh'):
+            flash('Email must be a KTU institutional email (@ktu.edu.gh)', 'error')
             return render_template('create_subadmin.html')
 
         # Create sub-admin user
@@ -47,8 +47,7 @@ def create_subadmin():
             username, password, 'subadmin',
             first_name=first_name,
             last_name=last_name,
-            email=email,
-            department='Computer Science'
+            email=email
         )
         
         if user_id:
