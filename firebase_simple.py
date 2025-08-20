@@ -1,3 +1,4 @@
+import os
 import requests
 import json
 import secrets
@@ -5,8 +6,8 @@ import string
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# Firebase Realtime Database URL
-FIREBASE_URL = "https://student-concern-portal-default-rtdb.firebaseio.com/"
+# Firebase Realtime Database URL - configurable via environment variable
+FIREBASE_URL = os.environ.get('FIREBASE_URL', "https://student-concern-portal-default-rtdb.firebaseio.com/")
 
 class SimpleFirebaseDB:
     def __init__(self):
