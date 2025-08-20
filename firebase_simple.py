@@ -347,6 +347,152 @@ class SimpleFirebaseDB:
                 return True, "Issue updated successfully"
         return False, "Failed to update issue"
     
+    # System Settings Management
+    def get_system_settings(self):
+        """Get all system settings"""
+        settings = self._make_request('system_settings')
+        if not settings:
+            # Return default settings if none exist
+            return self.get_default_system_settings()
+        return settings
+    
+    def get_default_system_settings(self):
+        """Get default system settings"""
+        return {
+            'system_info': {
+                'name': 'KTU Student Portal',
+                'full_name': 'Koforidua Technical University Student Portal',
+                'description': 'Submit and track your academic concerns',
+                'contact_email': 'support@ktu.edu.gh',
+                'phone': '+233-000-000-000'
+            },
+            'categories': {
+                'academic': {'name': 'Academic', 'description': 'Course content, schedules, lecturer issues'},
+                'exams_grades': {'name': 'Exams & Grades', 'description': 'Missing grades, exam timetables, remark requests'},
+                'technical': {'name': 'Technical', 'description': 'Portal issues, software problems'},
+                'administration': {'name': 'Administration', 'description': 'Registration, ID cards, fee clearance'},
+                'facilities': {'name': 'Facilities', 'description': 'Library, labs, study spaces'},
+                'welfare': {'name': 'Welfare', 'description': 'Counseling, conflicts, special needs'},
+                'other': {'name': 'Other', 'description': 'Any other concerns'}
+            },
+            'academic_levels': {
+                '100': 'Level 100',
+                '200': 'Level 200',
+                '300': 'Level 300',
+                '400': 'Level 400',
+                'graduate': 'Graduate',
+                'postgraduate': 'Postgraduate'
+            },
+            'index_prefixes': {
+                'CS': 'Computer Science',
+                'IT': 'Information Technology',
+                'EE': 'Electrical Engineering',
+                'ME': 'Mechanical Engineering',
+                'CE': 'Civil Engineering',
+                'BA': 'Business Administration'
+            },
+            'email_settings': {
+                'from_name': 'KTU Student Portal',
+                'from_email': 'noreply@ktu.edu.gh',
+                'support_email': 'support@ktu.edu.gh'
+            },
+            'registration_settings': {
+                'require_email_verification': True,
+                'allowed_email_domain': '@ktu.edu.gh',
+                'min_password_length': 8,
+                'require_index_prefix': False
+            },
+            'notification_messages': {
+                'registration_success': 'Registration successful! Please check your email for verification code.',
+                'email_verification_required': 'Please verify your email address before logging in.',
+                'login_success': 'Login successful!',
+                'invalid_credentials': 'Invalid username or password.',
+                'access_denied': 'Access denied. Admin privileges required.'
+            }
+        }
+    
+    def update_system_settings(self, settings_data):
+        """Update system settings"""
+        result = self._make_request('system_settings', 'PUT', settings_data)
+        return result is not None
+    
+    def get_setting(self, setting_path):
+        """Get a specific setting by path (e.g., 'system_info.name')"""
+        settings = self.get_system_settings()
+        keys = setting_path.split('.')
+        current = settings
+        
+        for key in keys:
+            if isinstance(current, dict) and key in current:
+                current = current[key]
+            else:
+                return None
+        
+        return current
+    
+    def update_setting(self, setting_path, value):
+        """Update a specific setting by path"""
+        settings = self.get_system_settings()
+        keys = setting_path.split('.')
+        current = settings
+        
+        # Navigate to the parent of the target setting
+        for key in keys[:-1]:
+            if key not in current:
+                current[key] = {}
+            current = current[key]
+        
+        # Update the target setting
+        current[keys[-1]] = value
+        
+        return self.update_system_settings(settings)
+    
+    def add_category(self, key, name, description):
+        """Add a new concern category"""
+        settings = self.get_system_settings()
+        if 'categories' not in settings:
+            settings['categories'] = {}
+        
+        settings['categories'][key] = {
+            'name': name,
+            'description': description
+        }
+        
+        return self.update_system_settings(settings)
+    
+    def remove_category(self, key):
+        """Remove a concern category"""
+        settings = self.get_system_settings()
+        if 'categories' in settings and key in settings['categories']:
+            del settings['categories'][key]
+            return self.update_system_settings(settings)
+        return False
+    
+    def add_index_prefix(self, prefix, description):
+        """Add a new index number prefix"""
+        settings = self.get_system_settings()
+        if 'index_prefixes' not in settings:
+            settings['index_prefixes'] = {}
+        
+        settings['index_prefixes'][prefix] = description
+        return self.update_system_settings(settings)
+    
+    def remove_index_prefix(self, prefix):
+        """Remove an index number prefix"""
+        settings = self.get_system_settings()
+        if 'index_prefixes' in settings and prefix in settings['index_prefixes']:
+            del settings['index_prefixes'][prefix]
+            return self.update_system_settings(settings)
+        return False
+    
+    def initialize_default_settings(self):
+        """Initialize system with default settings if none exist"""
+        current_settings = self._make_request('system_settings')
+        if not current_settings:
+            default_settings = self.get_default_system_settings()
+            return self.update_system_settings(default_settings)
+        return True
+    
     # Statistics
     def get_user_count_by_role(self):
         """Get user count by role"""
