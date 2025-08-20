@@ -197,6 +197,101 @@ class NotificationService:
 Link expires in 1 hour. If you didn't request this, ignore this message."""
         
         return self.send_sms(phone_number, message)
+    
+    def send_verification_email(self, to_email, user_name, verification_code):
+        """Send email verification code"""
+        subject = "Email Verification - CS Department Portal"
+        
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Email Verification</title>
+            <style>
+                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .header {{ background-color: #007bff; color: white; padding: 20px; text-align: center; }}
+                .content {{ padding: 30px; background-color: #f8f9fa; }}
+                .code {{ 
+                    display: inline-block; 
+                    padding: 15px 30px; 
+                    background-color: #28a745; 
+                    color: white; 
+                    font-size: 24px;
+                    font-weight: bold;
+                    letter-spacing: 3px;
+                    border-radius: 5px; 
+                    margin: 20px 0;
+                }}
+                .footer {{ padding: 20px; text-align: center; color: #666; font-size: 12px; }}
+                .warning {{ background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>📧 Email Verification</h1>
+                    <p>Computer Science Department - KTU Portal</p>
+                </div>
+                
+                <div class="content">
+                    <h2>Hello {user_name},</h2>
+                    
+                    <p>Thank you for registering with the CS Department Student Portal!</p>
+                    
+                    <p>Please use the verification code below to complete your registration:</p>
+                    
+                    <div style="text-align: center;">
+                        <div class="code">{verification_code}</div>
+                    </div>
+                    
+                    <div class="warning">
+                        <strong>⚠️ Important:</strong>
+                        <ul>
+                            <li>This code will expire in 15 minutes</li>
+                            <li>Enter this code on the verification page</li>
+                            <li>If you didn't create an account, please ignore this email</li>
+                        </ul>
+                    </div>
+                    
+                    <p>If you need help, contact the CS Department at cs@ktu.edu.gh</p>
+                    
+                    <p>Best regards,<br>
+                    CS Department<br>
+                    Koforidua Technical University</p>
+                </div>
+                
+                <div class="footer">
+                    <p>© 2025 Koforidua Technical University - Computer Science Department<br>
+                    This is an automated message, please do not reply to this email.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        
+        text_content = f"""
+        Email Verification - CS Department Portal
+        
+        Hello {user_name},
+        
+        Thank you for registering with the CS Department Student Portal!
+        
+        Please use this verification code to complete your registration:
+        {verification_code}
+        
+        This code will expire in 15 minutes.
+        
+        If you didn't create an account, please ignore this email.
+        
+        Best regards,
+        CS Department
+        Koforidua Technical University
+        """
+        
+        return self.send_email(to_email, subject, html_content, text_content)
 
 # Global instance
 notification_service = NotificationService()

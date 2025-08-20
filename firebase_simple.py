@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Firebase Realtime Database URL - configurable via environment variable
-FIREBASE_URL = os.environ.get('FIREBASE_URL', "https://student-concern-portal-default-rtdb.firebaseio.com/")
+FIREBASE_URL = os.environ.get('FIREBASE_URL', "https://csp5-d0355-default-rtdb.firebaseio.com/")
 
 class SimpleFirebaseDB:
     def __init__(self):
@@ -160,6 +160,44 @@ class SimpleFirebaseDB:
                 return True, "Password updated successfully"
         
         return False, "Failed to update password"
+    
+    def generate_verification_code(self):
+        """Generate a 6-digit verification code"""
+        import random
+        return str(random.randint(100000, 999999))
+    
+    def store_verification_code(self, user_id, code, purpose='registration'):
+        """Store verification code for email verification"""
+        verification_data = {
+            'user_id': user_id,
+            'code': code,
+            'purpose': purpose,
+            'created_at': datetime.now().isoformat(),
+            'used': False,
+            'expires_at': (datetime.now() + timedelta(minutes=15)).isoformat()  # 15 min expiry
+        }
+        
+        result = self._make_request('verification_codes', 'POST', verification_data)
+        return result.get('name') if result else None
+    
+    def verify_code(self, code, purpose='registration'):
+        """Verify and use a verification code"""
+        codes = self._make_request('verification_codes')
+        if codes:
+            for code_id, code_data in codes.items():
+                if (code_data.get('code') == code and 
+                    code_data.get('purpose') == purpose and
+                    not code_data.get('used', False)):
+                    
+                    # Check if not expired
+                    expires_at = datetime.fromisoformat(code_data['expires_at'])
+                    if datetime.now() < expires_at:
+                        # Mark as used
+                        code_data['used'] = True
+                        code_data['used_at'] = datetime.now().isoformat()
+                        self._make_request(f'verification_codes/{code_id}', 'PUT', code_data)
+                        return code_data['user_id']
+        return None
     
     def generate_reset_token(self):
         """Generate a secure reset token"""

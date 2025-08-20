@@ -41,34 +41,34 @@ def index():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        # Basic required fields
-        username = request.form.get('username', '').strip()
+        # Basic required fields for CS Department
+        username = request.form.get('username', '').strip().lower()
         password = request.form.get('password', '')
         confirm_password = request.form.get('confirm_password', '')
         
         # Personal information
         first_name = request.form.get('first_name', '').strip()
         last_name = request.form.get('last_name', '').strip()
-        email = request.form.get('email', '').strip()
-        phone = request.form.get('phone', '').strip()
-        date_of_birth = request.form.get('date_of_birth', '')
+        email = request.form.get('email', '').strip().lower()
+        
+        # CS Department academic information
+        student_id = request.form.get('student_id', '').strip().upper()  # Index number
+        level = request.form.get('level', '')
         gender = request.form.get('gender', '')
         
-        # Academic information
-        student_id = request.form.get('student_id', '').strip()
-        level = request.form.get('level', '')
-        department = request.form.get('department', '')
-        program = request.form.get('program', '').strip()
-        
-        # Additional information
-        address = request.form.get('address', '').strip()
-        emergency_contact_name = request.form.get('emergency_contact_name', '').strip()
-        emergency_contact_phone = request.form.get('emergency_contact_phone', '').strip()
-        terms_accepted = request.form.get('terms_accepted') == 'on'
-        
-        # Validation
-        if not all([username, password, first_name, last_name, email, phone, student_id, level, department]):
+        # Validation for CS Department
+        if not all([username, password, first_name, last_name, email, student_id, level, gender]):
             flash('All required fields must be filled.', 'error')
+            return render_template('register.html')
+        
+        # CS Department email validation
+        if not email.endswith('@cs.ktu.edu.gh'):
+            flash('Email must be from CS department (@cs.ktu.edu.gh)', 'error')
+            return render_template('register.html')
+        
+        # Index number validation for CS department
+        if not student_id.startswith('CS'):
+            flash('Index number must start with "CS" for Computer Science department', 'error')
             return render_template('register.html')
         
         if password != confirm_password:
@@ -79,33 +79,42 @@ def register():
             flash('Password must be at least 8 characters long.', 'error')
             return render_template('register.html')
         
-        if not terms_accepted:
-            flash('You must accept the Terms and Conditions to register.', 'error')
+        if gender not in ['M', 'F']:
+            flash('Gender must be M (Male) or F (Female)', 'error')
             return render_template('register.html')
         
-        # Prepare additional data
+        # Prepare CS department specific data
         additional_data = {
             'first_name': first_name,
             'last_name': last_name,
             'email': email,
-            'phone': phone,
-            'date_of_birth': date_of_birth,
-            'gender': gender,
             'student_id': student_id,
             'level': level,
-            'department': department,
-            'program': program,
-            'address': address,
-            'emergency_contact_name': emergency_contact_name,
-            'emergency_contact_phone': emergency_contact_phone,
-            'terms_accepted': terms_accepted
+            'gender': gender,
+            'department': 'Computer Science',
+            'program': 'Computer Science',
+            'email_verified': False,  # Email verification required
+            'verification_code': None
         }
         
-        # Create new user with extended information
+        # Create new CS student user
         user_id, message = simple_firebase_db.create_user(username, password, 'student', **additional_data)
         if user_id:
-            flash('Registration successful! Please log in.', 'success')
-            return redirect(url_for('login'))
+            # Generate and send verification code
+            verification_code = simple_firebase_db.generate_verification_code()
+            simple_firebase_db.store_verification_code(user_id, verification_code, 'registration')
+            
+            # Send verification email
+            success, email_message = notification_service.send_verification_email(
+                email, first_name + ' ' + last_name, verification_code
+            )
+            
+            if success:
+                flash('Registration successful! Please check your email for verification code.', 'success')
+                return redirect(url_for('verify_email', user_id=user_id))
+            else:
+                flash('Registration successful but failed to send verification email. Please contact support.', 'warning')
+                return redirect(url_for('login'))
         else:
             flash(f'Registration failed: {message}', 'error')
             return render_template('register.html')
@@ -193,6 +202,46 @@ def forgot_password():
     
     return render_template('forgot_password.html')
 
+@app.route('/verify_email/<string:user_id>', methods=['GET', 'POST'])
+def verify_email(user_id):
+    if request.method == 'POST':
+        verification_code = request.form.get('verification_code', '').strip()
+        
+        if not verification_code:
+            flash('Please enter the verification code.', 'error')
+            return render_template('verify_email.html', user_id=user_id)
+        
+        # Verify the code
+        verified_user_id = simple_firebase_db.verify_code(verification_code, 'registration')
+        
+        if verified_user_id == user_id:
+            # Mark user as email verified
+            user = simple_firebase_db.get_user_by_id(user_id)
+            if user:
+                user['email_verified'] = True
+                user['verified_at'] = datetime.now().isoformat()
+                success = simple_firebase_db._make_request(f'users/{user_id}', 'PUT', user)
+                
+                if success:
+                    flash('Email verified successfully! You can now log in.', 'success')
+                    return redirect(url_for('login'))
+                else:
+                    flash('Failed to update verification status. Please try again.', 'error')
+            else:
+                flash('User not found.', 'error')
+        else:
+            flash('Invalid or expired verification code. Please try again.', 'error')
+        
+        return render_template('verify_email.html', user_id=user_id)
+    
+    # GET request - show verification form
+    user = simple_firebase_db.get_user_by_id(user_id)
+    if not user:
+        flash('Invalid verification link.', 'error')
+        return redirect(url_for('register'))
+    
+    return render_template('verify_email.html', user_id=user_id, user=user)
+
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     # Verify token
@@ -235,7 +284,7 @@ def dashboard():
     if not g.user:
         return redirect(url_for('login'))
     
-    if g.user['role'] == 'admin' or g.user['role'] == 'subadmin':
+    if g.user['role'] == 'supaadmin' or g.user['role'] == 'subadmin':
         # Admin dashboard - simplified version
         all_issues = simple_firebase_db.get_all_issues()
         pending_issues = simple_firebase_db.get_issues_by_status('pending')
