@@ -1,7 +1,8 @@
-modules = ["python-3.11"]
+modules = ["python-3.11", "web"]
+run = "python main.py"
 
 [nix]
-channel = "stable-24_05"
+channel = "stable-25_05"
 packages = ["openssl", "postgresql"]
 
 [deployment]
