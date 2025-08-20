@@ -138,6 +138,13 @@ def login():
         
         user = simple_firebase_db.verify_password(username, password)
         if user:
+            # Check if email verification is required and completed
+            require_verification = simple_firebase_db.get_setting('registration_settings.require_email_verification')
+            if require_verification is not False and not user.get('email_verified', False):
+                error_msg = simple_firebase_db.get_setting('notification_messages.email_verification_required') or 'Please verify your email address before logging in.'
+                flash(error_msg, 'error')
+                return render_template('login.html')
+            
             session['username'] = user['username']
             success_msg = simple_firebase_db.get_setting('notification_messages.login_success') or 'Login successful!'
             flash(success_msg, 'success')
@@ -230,6 +237,8 @@ def verify_email(user_id):
                 success = simple_firebase_db._make_request(f'users/{user_id}', 'PUT', user)
                 
                 if success:
+                    # Also mark user as verified in the system
+                    simple_firebase_db._make_request(f'users/{user_id}', 'PUT', {'email_verified': True})
                     success_msg = simple_firebase_db.get_setting('notification_messages.email_verified_success') or 'Email verified successfully! You can now log in.'
                     flash(success_msg, 'success')
                     return redirect(url_for('login'))

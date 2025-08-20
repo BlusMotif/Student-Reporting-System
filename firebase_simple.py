@@ -58,7 +58,7 @@ class SimpleFirebaseDB:
     def verify_password(self, username, password):
         """Verify user password"""
         user = self.get_user_by_username(username)
-        if user and check_password_hash(user['password'], password):
+        if user and check_password_hash(user.get('password_hash', user.get('password', '')), password):
             return user
         return None
     
@@ -110,7 +110,7 @@ class SimpleFirebaseDB:
         
         user_data = {
             'username': username,
-            'password': generate_password_hash(password),
+            'password_hash': generate_password_hash(password),
             'role': role,
             'created_at': datetime.now().isoformat(),
             # Personal Information
